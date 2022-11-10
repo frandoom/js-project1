@@ -1,3 +1,9 @@
+// html setup
+var pupilsHTMLCollection = document.getElementsByTagName('pupil');
+var pupilsArray = Array.from(pupilsHTMLCollection);
+console.log('pupilsArray', pupilsArray)
+
+// input setup
 var input = {
     mouseX: {
         start: 0,
@@ -8,28 +14,40 @@ var input = {
         start: 0,
         end: window.innerHeight,
         current: 0,
-    }
+    },
 };
-
 input.mouseX.range = input.mouseX.end - input.mouseX.start;
 input.mouseY.range = input.mouseY.end - input.mouseY.start;
 
+// output setup
+var output = {
+    x: {
+        start: -75,
+        end: 75,
+        current: 0,
+    },
+    y: {
+
+    },
+};
+output.x.range = output.x.end - output.x.start;
+
 var handleMouseMove = function (event) {
+    // mouse x input
     input.mouseX.current = event.clientX;
     input.mouseX.fraction = (input.mouseX.current - input.mouseX.start) / input.mouseX.range;
-
+    // mouse y input
     input.mouseY.current = event.clientY;
     input.mouseY.fraction = (input.mouseY.current - input.mouseY.start) / input.mouseY.range;
-    
-    // if (input.mouseX.fraction > 1) {
-    //     input.mouseX.fraction = 1;
-    // }
-    // if (input.mouseX.fraction < 0) {
-    //     input.mouseX.fraction = 0;
-    // }
+    // output x
+    output.x.current = output.x.start + (input.mouseX.fraction * output.x.range);
+    // apply output to html
+    pupilsArray.forEach(function(pupil, i) {
+        pupil.style.transform = 'translateX(75px)';
+    });
 
-    console.log('fraction X', input.mouseX.fraction)
-    console.log('fraction Y', input.mouseY.fraction)
+    // console.log('foutput.x.current', output.x.current)
+    // console.log('fraction Y', input.mouseY.fraction)
 }
 
 var handleResize = function () {
