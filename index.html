@@ -2,11 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JS Mouse input</title>
-    <link rel="stylesheet" href="mycss.css">
-    <script src="myscript.js"></script>
+    <title>JS Project 01</title>
+    <style>
+        body{
+            background-color: #b6d4aa;
+            margin: 0;
+        }
+        .eye{
+            background-color: white;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -100px;
+            margin-top: -100px;
+            overflow: hidden;
+        }
+        .pupil{
+            background-color: black;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -25px;
+            margin-top: -25px;
+        }
+        .eye1{
+            margin-left: -225px;
+        }
+        .eye2{
+            margin-left: 25px;
+        }
+
+    </style>
 </head>
 <body>
 
@@ -17,6 +51,75 @@
     <div class="pupil"></div>
 </div>
 
-    
 </body>
+
+<script>
+// html setup
+var pupilsHTMLCollection = document.getElementsByClassName('pupil');
+var pupilsArray = Array.from(pupilsHTMLCollection);
+
+// input setup
+var input = {
+    mouseX: {
+        start: 0,
+        end: window.innerWidth,
+        current: 0,
+    },
+    mouseY: {
+        start: 0,
+        end: window.innerHeight,
+        current: 0,
+    },
+};
+input.mouseX.range = input.mouseX.end - input.mouseX.start;
+input.mouseY.range = input.mouseY.end - input.mouseY.start;
+
+// output setup
+var output = {
+    x: {
+        start: -78,
+        end: 78,
+        current: 0,
+    },
+    y: {
+        start: -78,
+        end: 78,
+        current: 0,
+    },
+};
+output.x.range = output.x.end - output.x.start;
+output.y.range = output.y.end - output.y.start;
+
+var handleMouseMove = function (event) {
+    // mouse x input
+    input.mouseX.current = event.clientX;
+    input.mouseX.fraction = (input.mouseX.current - input.mouseX.start) / input.mouseX.range;
+    // mouse y input
+    input.mouseY.current = event.clientY;
+    input.mouseY.fraction = (input.mouseY.current - input.mouseY.start) / input.mouseY.range;
+    // output x
+    output.x.current = output.x.start + (input.mouseX.fraction * output.x.range);
+    // output y
+    output.y.current = output.y.start + (input.mouseY.fraction * output.y.range);
+    // apply output to html
+    pupilsArray.forEach(function(pupil, i) {
+        pupil.style.transform = 'translate('+output.x.current+'px, '+output.y.current+'px)';
+    });
+
+    // console.log('foutput.x.current', output.x.current)
+    // console.log('fraction Y', input.mouseY.fraction)
+}
+
+var handleResize = function () {
+    input.mouseX.end = windows.innerWidth;
+    input.mouseX.range = input.mouseX.end - input.mouseX.start;
+
+    input.mouseY.end = windows.innerHeight;
+    input.mouseY.range = input.mouseY.end - input.mouseY.start;
+}
+
+window.addEventListener('mousemove', handleMouseMove)
+window.addEventListener('resize', handleResize)
+
+</script>
 </html>
